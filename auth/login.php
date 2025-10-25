@@ -32,7 +32,7 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
         
         body.login-page {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -49,14 +49,14 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
             background: white;
             border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             display: grid;
             grid-template-columns: 1fr 1fr;
             min-height: 500px;
         }
         
         .login-left {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #50e3c2 0%, #4dd0e1 100%);
             padding: 3rem;
             display: flex;
             flex-direction: column;
@@ -209,8 +209,8 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
         
         .google-btn:hover {
             background: #f8f9fa;
-            border-color: #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            border-color: #50e3c2;
+            box-shadow: 0 4px 12px rgba(80, 227, 194, 0.2);
             transform: translateY(-2px);
         }
         
@@ -237,7 +237,7 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
         }
         
         .login-footer a:hover {
-            color: #764ba2;
+            color: #4dd0e1;
             text-decoration: underline;
         }
         
@@ -385,9 +385,9 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
                 
                 <div class="login-footer">
                     <p style="margin: 0; line-height: 1.8;">
-                        <a href="<?php echo BASE_URL; ?>/privacy.php" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+                        <a href="<?php echo BASE_URL; ?>/privacy.php" style="color: #50e3c2; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
                         <span style="color: #cbd5e0;">•</span>
-                        <a href="<?php echo BASE_URL; ?>/terms.php" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 8px;">Terms of Service</a>
+                        <a href="<?php echo BASE_URL; ?>/terms.php" style="color: #50e3c2; text-decoration: none; margin: 0 8px;">Terms of Service</a>
                     </p>
                 </div>
             </div>

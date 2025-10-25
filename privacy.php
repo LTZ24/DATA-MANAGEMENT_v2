@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Data Management System</title>
+    <link rel="icon" type="image/png" href="assets/images/smk62.png">
     <style>
         * {
             margin: 0;
@@ -12,80 +13,108 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            color: #000;
+            background: #fff;
             padding: 20px;
         }
         
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
         }
         
         h1 {
-            color: #2c3e50;
-            margin-bottom: 10px;
+            color: #000;
+            margin-bottom: 5px;
             font-size: 2em;
+            font-weight: 600;
         }
         
         .last-updated {
-            color: #7f8c8d;
+            color: #666;
             margin-bottom: 30px;
             font-size: 0.9em;
         }
         
         h2 {
-            color: #34495e;
+            color: #000;
             margin-top: 30px;
             margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
+            font-size: 1.3em;
+            font-weight: 600;
         }
         
         p {
             margin-bottom: 15px;
             text-align: justify;
+            color: #333;
         }
         
         ul {
-            margin-left: 30px;
+            margin-left: 25px;
             margin-bottom: 15px;
         }
         
         li {
             margin-bottom: 8px;
+            color: #333;
+        }
+        
+        a {
+            color: #000;
+            text-decoration: underline;
+        }
+        
+        a:hover {
+            color: #666;
         }
         
         .contact {
-            background: #ecf0f1;
+            background: #f5f5f5;
             padding: 20px;
-            border-radius: 5px;
             margin-top: 30px;
+            border: 1px solid #ddd;
         }
         
         .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: #3498db;
+            margin-bottom: 20px;
+            color: #000;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 500;
+            border: 1px solid #000;
+            padding: 8px 16px;
         }
         
         .back-link:hover {
-            text-decoration: underline;
+            background: #000;
+            color: #fff;
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 1.5em; }
+            .last-updated { font-size: 0.8em; }
+            h2 { font-size: 1.1em; margin-top: 20px; }
+            p, li { font-size: 0.9em; }
+            ul { margin-left: 20px; }
+            .contact { padding: 15px; font-size: 0.9em; }
+            .back-link { font-size: 0.9em; padding: 6px 12px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <h1>Privacy Policy</h1>
-        <p class="last-updated">Last updated: October 25, 2025</p>
+        <p>Last updated: October 25, 2025</p>
+    </div>
+    
+    <div class="container">
         
         <p>
             Selamat datang di Data Management System. Kami menghargai privasi Anda dan berkomitmen untuk melindungi 
@@ -188,20 +217,18 @@
             <li>UU ITE Indonesia (UU No. 11 Tahun 2008)</li>
             <li>Peraturan Perlindungan Data Pribadi Indonesia</li>
             <li>Google API Services User Data Policy</li>
-            <li>GDPR (untuk pengguna dari Eropa)</li>
         </ul>
 
-        <div class="contact">
-            <h2>Hubungi Kami</h2>
-            <p>Jika Anda memiliki pertanyaan tentang Privacy Policy ini, silakan hubungi:</p>
-            <p>
-                <strong>Email:</strong> privacy@yourdomain.com<br>
-                <strong>GitHub:</strong> <a href="https://github.com/LTZ24" target="_blank">@LTZ24</a><br>
-                <strong>Repository:</strong> <a href="https://github.com/LTZ24/DATA-MANAGEMENT_v2" target="_blank">DATA-MANAGEMENT_v2</a>
-            </p>
-        </div>
+        <h2>Hubungi Kami</h2>
+        <p>Jika Anda memiliki pertanyaan tentang Privacy Policy ini, silakan hubungi melalui GitHub:</p>
+        <p>
+            <strong>GitHub:</strong> <a href="https://github.com/LTZ24" target="_blank">@LTZ24</a><br>
+            <strong>Repository:</strong> <a href="https://github.com/LTZ24/DATA-MANAGEMENT_v2" target="_blank">DATA-MANAGEMENT_v2</a>
+        </p>
 
-        <a href="/" class="back-link">← Back to Home</a>
+        <a href="auth/login.php" class="back-link">← Back to Login</a>
     </div>
 </body>
 </html>
+
+
