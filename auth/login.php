@@ -153,42 +153,6 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
             margin-top: 2px;
         }
         
-        .login-info {
-            background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            padding: 1.25rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .login-info h4 {
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-            color: #2d3748;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .login-info ul {
-            list-style: none;
-        }
-        
-        .login-info li {
-            padding: 0.4rem 0;
-            color: #4a5568;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .login-info li::before {
-            content: "✓";
-            color: #48bb78;
-            font-weight: bold;
-        }
-        
         .google-btn {
             background: white;
             color: #444;
@@ -294,18 +258,6 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
                 font-size: 0.875rem;
             }
             
-            .login-info {
-                padding: 1rem;
-            }
-            
-            .login-info h4 {
-                font-size: 0.875rem;
-            }
-            
-            .login-info li {
-                font-size: 0.8rem;
-            }
-            
             .google-btn {
                 padding: 12px 20px;
                 font-size: 0.95rem;
@@ -360,18 +312,6 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
                         </div>
                     </div>
                 <?php endif; ?>
-                
-                <div class="login-info">
-                    <h4>
-                        <i class="fas fa-info-circle"></i>
-                        Informasi Login
-                    </h4>
-                    <ul>
-                        <li>Gunakan akun Google Anda untuk masuk</li>
-                        <li>Pastikan menggunakan email resmi sekolah</li>
-                        <li>Data tersimpan aman di Google Sheets</li>
-                    </ul>
-                </div>
                 
                 <a href="<?php echo htmlspecialchars($authUrl); ?>" class="google-btn">
                     <svg class="google-icon" viewBox="0 0 24 24">
