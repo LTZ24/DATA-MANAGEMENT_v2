@@ -1,0 +1,130 @@
+<?php
+// Bahasa Indonesia
+return [
+    // Common
+    'welcome' => 'Selamat datang',
+    'logout' => 'Keluar',
+    'settings' => 'Pengaturan',
+    'profile' => 'Profil',
+    'admin' => 'Admin',
+    'save' => 'Simpan',
+    'cancel' => 'Batal',
+    'edit' => 'Edit',
+    'delete' => 'Hapus',
+    'add' => 'Tambah',
+    'search' => 'Cari',
+    'filter' => 'Filter',
+    'refresh' => 'Refresh',
+    'back' => 'Kembali',
+    'yes' => 'Ya',
+    'no' => 'Tidak',
+    
+    // Navigation
+    'nav_dashboard' => 'Dashboard',
+    'nav_links' => 'Kelola Links',
+    'nav_forms' => 'Kelola Forms',
+    'nav_file_management' => 'FILE MANAGEMENT',
+    'nav_file_manager' => 'File Manager',
+    'nav_upload' => 'Upload File',
+    'nav_account' => 'AKUN',
+    
+    // Dashboard
+    'dashboard_title' => 'Dashboard',
+    'dashboard_welcome' => 'Selamat datang',
+    'storage_google_drive' => 'Storage Google Drive',
+    'storage_used' => 'terpakai dari',
+    'storage_remaining' => 'tersisa',
+    'total_links' => 'Total Links',
+    'total_forms' => 'Total Forms',
+    'recent_uploads' => 'Upload Terbaru',
+    'total_files' => 'Total',
+    'quick_actions' => 'Aksi Cepat',
+    
+    // Links
+    'links_title' => 'Kelola Links',
+    'add_link' => 'Tambah Link',
+    'edit_link' => 'Edit Link',
+    'link_title' => 'Judul Link',
+    'link_url' => 'URL',
+    'link_list' => 'Daftar Links',
+    'link_saved' => 'Link berhasil tersimpan!',
+    'link_updated' => 'Link berhasil diperbarui!',
+    'link_deleted' => 'Link berhasil dihapus!',
+    'no_links' => 'Belum ada link yang ditambahkan',
+    
+    // Forms
+    'forms_title' => 'Kelola Forms',
+    'add_form' => 'Tambah Form',
+    'edit_form' => 'Edit Form',
+    'form_title' => 'Judul Form',
+    'form_url' => 'URL',
+    'form_list' => 'Daftar Forms',
+    'form_saved' => 'Form berhasil tersimpan!',
+    'form_updated' => 'Form berhasil diperbarui!',
+    'form_deleted' => 'Form berhasil dihapus!',
+    'no_forms' => 'Belum ada form yang ditambahkan',
+    
+    // File Manager
+    'file_manager_title' => 'File Manager',
+    'upload_file_title' => 'Upload File',
+    'file_name' => 'Nama File',
+    'file_size' => 'Ukuran',
+    'file_type' => 'Tipe',
+    'file_date' => 'Tanggal Upload',
+    'file_actions' => 'Aksi',
+    'category' => 'Kategori',
+    'select_category' => 'Pilih Kategori',
+    'sort_by' => 'Urutkan',
+    'all_categories' => 'Semua Kategori',
+    'no_files' => 'Belum ada file yang diupload',
+    
+    // Categories
+    'cat_curriculum' => 'Kurikulum',
+    'cat_administration' => 'Administrasi',
+    'cat_learning' => 'Pembelajaran',
+    'cat_student' => 'Kesiswaan',
+    'cat_teacher' => 'Kepegawaian',
+    'cat_finance' => 'Keuangan',
+    'cat_infrastructure' => 'Sarpras',
+    'cat_other' => 'Lainnya',
+    
+    // Settings
+    'settings_title' => 'Pengaturan',
+    'appearance' => 'Tampilan',
+    'language_setting' => 'Bahasa / Language',
+    'language_description' => 'Pilih bahasa tampilan aplikasi',
+    'sidebar_status' => 'Status Sidebar',
+    'sidebar_current' => 'Sidebar saat ini',
+    'data_cache' => 'Data & Cache',
+    'clear_cache' => 'Bersihkan Cache',
+    'clear_cache_desc' => 'Hapus data cache untuk meningkatkan performa aplikasi',
+    'sync_data' => 'Sinkronisasi Data',
+    'sync_desc' => 'Real-time dengan Google Sheets',
+    'about_app' => 'Tentang Aplikasi',
+    'app_name' => 'Nama Aplikasi',
+    'app_version' => 'Versi',
+    'active' => 'Aktif',
+    
+    // Profile
+    'profile_title' => 'Profil Saya',
+    'personal_info' => 'Informasi Pribadi',
+    'full_name' => 'Nama Lengkap',
+    'email' => 'Email',
+    'role' => 'Role',
+    'account_info' => 'Informasi Akun',
+    'google_account' => 'Akun Google',
+    'last_login' => 'Login Terakhir',
+    'account_note' => 'Catatan',
+    'account_note_text' => 'Data profil menggunakan informasi dari akun Google Anda',
+    
+    // Messages
+    'success' => 'Berhasil!',
+    'error' => 'Error!',
+    'warning' => 'Peringatan!',
+    'info' => 'Informasi',
+    'confirm_delete' => 'Yakin ingin menghapus?',
+    'language_changed' => 'Bahasa berhasil diubah ke Bahasa Indonesia',
+    
+    // Footer
+    'footer_text' => 'Database Guru SMKN 62 Jakarta - Sistem Manajemen Guru & File',
+];

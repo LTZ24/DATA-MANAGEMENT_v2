@@ -1,0 +1,159 @@
+/* AJAX Loading Overlay */
+#ajax-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+.ajax-spinner {
+    background: white;
+    padding: 2rem 3rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.ajax-spinner i {
+    font-size: 3rem;
+    color: #2563eb;
+    margin-bottom: 1rem;
+}
+
+.ajax-spinner p {
+    margin: 0;
+    color: #1f2937;
+    font-size: 1.125rem;
+    font-weight: 500;
+}
+
+/* AJAX Notifications */
+.ajax-notification {
+    position: fixed;
+    top: 90px;
+    right: -400px;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 9998;
+    transition: right 0.3s ease;
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.ajax-notification.show {
+    right: 20px;
+}
+
+.ajax-notification i {
+    font-size: 1.5rem;
+}
+
+.ajax-notification-success {
+    border-left: 4px solid #10b981;
+}
+
+.ajax-notification-success i {
+    color: #10b981;
+}
+
+.ajax-notification-error {
+    border-left: 4px solid #ef4444;
+}
+
+.ajax-notification-error i {
+    color: #ef4444;
+}
+
+.ajax-notification-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.ajax-notification-info i {
+    color: #3b82f6;
+}
+
+.ajax-notification span {
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Loading State for Buttons */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Smooth Page Transitions */
+.main-content {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress Bar for Page Loads */
+.ajax-progress-bar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+    z-index: 9999;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+}
+
+.ajax-progress-bar.loading {
+    animation: progressPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

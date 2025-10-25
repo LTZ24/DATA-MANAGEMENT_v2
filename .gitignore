@@ -1,0 +1,56 @@
+# Credentials & Configuration Files
+includes/config.php
+
+# Vendor Dependencies (should be installed via composer)
+/vendor/
+composer.lock
+
+# User Uploaded Files
+/data/uploads/*
+!/data/uploads/.gitkeep
+
+# Session & Temporary Files
+/data/sessions/*
+!/data/sessions/.gitkeep
+
+# Log Files
+*.log
+/logs/
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.buildpath
+
+# Environment Files
+.env
+.env.local
+.env.*.local
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.tmp
+
+# Documentation (keep only essential docs)
+AJAX_IMPLEMENTATION.md
+AUTO_LOGOUT_DOCUMENTATION.md
+LAYOUT_UPDATE.md
+SIDEBAR_REDESIGN.md
+UPDATE_LOG_FILE_MANAGER.md
