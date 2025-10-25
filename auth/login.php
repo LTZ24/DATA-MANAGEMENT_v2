@@ -227,13 +227,18 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
         }
         
         .login-footer p {
-            color: #a0aec0;
+            color: #718096;
             font-size: 0.875rem;
-            margin: 0.25rem 0;
+            margin: 0;
         }
         
-        .login-footer i {
-            margin-right: 0.25rem;
+        .login-footer a {
+            transition: color 0.2s;
+        }
+        
+        .login-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
         }
         
         @keyframes slideDown {
@@ -379,8 +384,11 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
                 </a>
                 
                 <div class="login-footer">
-                    <p><i class="fas fa-shield-alt"></i> Dilindungi dengan Google OAuth 2.0</p>
-                    <p>v<?php echo APP_VERSION; ?></p>
+                    <p style="margin: 0; line-height: 1.8;">
+                        <a href="<?php echo BASE_URL; ?>/privacy.php" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 8px;">Privacy Policy</a>
+                        <span style="color: #cbd5e0;">•</span>
+                        <a href="<?php echo BASE_URL; ?>/terms.php" target="_blank" style="color: #667eea; text-decoration: none; margin: 0 8px;">Terms of Service</a>
+                    </p>
                 </div>
             </div>
         </div>
