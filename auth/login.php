@@ -277,20 +277,12 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
                 <div class="features">
                     <ul>
                         <li>
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Login aman dengan Google OAuth</span>
-                        </li>
-                        <li>
                             <i class="fas fa-cloud"></i>
                             <span>Data tersimpan di Google Cloud</span>
                         </li>
                         <li>
                             <i class="fas fa-users"></i>
                             <span>Manajemen data guru terintegrasi</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-clock"></i>
-                            <span>Akses 24/7 dari mana saja</span>
                         </li>
                     </ul>
                 </div>
