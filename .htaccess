@@ -1,0 +1,31 @@
+# ==============================================================================
+# Security Configuration - Data Management System
+# ==============================================================================
+
+# Disable Directory Listing
+Options -Indexes
+
+# Prevent access to sensitive files
+<FilesMatch "^(config\.php|config_ex\.php|\.env|\.git|composer\.json|composer\.lock)$">
+    Require all denied
+</FilesMatch>
+
+# Block access to hidden files
+<FilesMatch "^\.|\.bak$|\.backup$|\.swp$|\.old$|\.sql$|\.log$">
+    Require all denied
+</FilesMatch>
+
+# Custom Error Pages (hide server info)
+ErrorDocument 400 /Data-Base-Guru-v2/error.php?code=400
+ErrorDocument 401 /Data-Base-Guru-v2/error.php?code=401
+ErrorDocument 403 /Data-Base-Guru-v2/error.php?code=403
+ErrorDocument 404 /Data-Base-Guru-v2/error.php?code=404
+ErrorDocument 500 /Data-Base-Guru-v2/error.php?code=500
+
+# Limit file upload size (10MB)
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+
+# Session security
+php_flag session.cookie_httponly on
+php_value session.gc_maxlifetime 1800
