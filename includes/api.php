@@ -41,19 +41,22 @@ try {
 }
 
 function getDashboardStats($db) {
-    // Get total guru
-    $stmt = $db->query("SELECT COUNT(*) as total FROM guru");
+    // Get total guru - Using prepared statement for consistency
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM guru");
+    $stmt->execute();
     $total_guru = $stmt->fetch()['total'] ?? 0;
     
-    // Get active guru
-    $stmt = $db->query("SELECT COUNT(*) as total FROM guru WHERE status = 'aktif'");
+    // Get active guru - Prepared statement with parameter
+    $stmt = $db->prepare("SELECT COUNT(*) as total FROM guru WHERE status = ?");
+    $stmt->execute(['aktif']);
     $guru_aktif = $stmt->fetch()['total'] ?? 0;
     
     // Get data in cloud (placeholder)
     $data_cloud = $total_guru;
     
-    // Get last sync time
-    $stmt = $db->query("SELECT MAX(updated_at) as last_sync FROM guru");
+    // Get last sync time - Prepared statement
+    $stmt = $db->prepare("SELECT MAX(updated_at) as last_sync FROM guru");
+    $stmt->execute();
     $last_sync_raw = $stmt->fetch()['last_sync'] ?? null;
     $last_sync = $last_sync_raw ? formatDateTime($last_sync_raw) : 'Belum pernah';
     
@@ -66,11 +69,17 @@ function getDashboardStats($db) {
 }
 
 function getGuruList($db) {
-    $stmt = $db->query("SELECT * FROM guru ORDER BY nama ASC");
+    // Use prepared statement even without parameters for consistency
+    $stmt = $db->prepare("SELECT * FROM guru ORDER BY nama ASC");
+    $stmt->execute();
     return $stmt->fetchAll();
 }
 
 function searchGuru($db, $keyword) {
+    // Sanitize input - remove potential SQL injection characters
+    $keyword = trim($keyword);
+    
+    // Use prepared statement with parameterized query
     $stmt = $db->prepare("
         SELECT * FROM guru 
         WHERE nama LIKE ? 
