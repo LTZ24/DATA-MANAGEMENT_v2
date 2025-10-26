@@ -90,12 +90,16 @@ $logoutReason = isset($_GET['reason']) ? $_GET['reason'] : '';
         }
         
         .login-left .features {
-            text-align: left;
+            text-align: center;
             width: 100%;
+            display: flex;
+            justify-content: center;
         }
         
         .login-left .features ul {
             list-style: none;
+            display: inline-block;
+            text-align: left;
         }
         
         .login-left .features li {
