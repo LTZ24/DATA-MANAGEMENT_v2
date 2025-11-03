@@ -37,12 +37,22 @@ define('FOLDER_DOKUMEN', 'your-dokumen-folder-id');
 define('GOOGLE_SHEETS_ID', 'your-google-sheets-id');
 
 // Google Sheets IDs per Category (for Links & Forms)
-// You can use the same sheet with different tabs, or separate sheets per category
-// Each category will have tabs like: Links-Kesiswaan, Links-Kurikulum, Forms-Kesiswaan, etc.
-define('SHEETS_KESISWAAN', 'your-kesiswaan-sheets-id');
-define('SHEETS_KURIKULUM', 'your-kurikulum-sheets-id');
-define('SHEETS_SAPRAS_HUMAS', 'your-sapras-humas-sheets-id');
-define('SHEETS_TATA_USAHA', 'your-tata-usaha-sheets-id');
+// IMPORTANT: Buat Google Sheets terpisah untuk setiap kategori, atau gunakan 1 sheets dengan multiple tabs
+// Setiap sheets harus punya 2 tabs: "Links-[Kategori]" dan "Forms-[Kategori]"
+// Contoh untuk Kesiswaan: "Links-Kesiswaan" dan "Forms-Kesiswaan"
+// Lihat CARA_SETUP_SHEETS_KATEGORI.md untuk panduan lengkap
+// 
+// OPTION 1: Gunakan sheets terpisah (4 sheets berbeda)
+define('SHEETS_KESISWAAN', 'your-kesiswaan-sheets-id-disini');
+define('SHEETS_KURIKULUM', 'your-kurikulum-sheets-id-disini');
+define('SHEETS_SAPRAS_HUMAS', 'your-sapras-humas-sheets-id-disini');
+define('SHEETS_TATA_USAHA', 'your-tata-usaha-sheets-id-disini');
+// 
+// OPTION 2: Gunakan 1 sheets dengan multiple tabs (copy ID yang sama ke semua)
+// define('SHEETS_KESISWAAN', 'same-sheets-id-for-all');
+// define('SHEETS_KURIKULUM', 'same-sheets-id-for-all');
+// define('SHEETS_SAPRAS_HUMAS', 'same-sheets-id-for-all');
+// define('SHEETS_TATA_USAHA', 'same-sheets-id-for-all');
 
 // File Upload Configuration
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
@@ -538,6 +548,16 @@ function getDriveCategories() {
             'color' => '#e74c3c'
         ]
     ];
+}
+
+// Get link categories (same as drive categories)
+function getLinkCategories() {
+    return getDriveCategories();
+}
+
+// Get form categories (same as drive categories)
+function getFormCategories() {
+    return getDriveCategories();
 }
 
 // Format file size to human readable
