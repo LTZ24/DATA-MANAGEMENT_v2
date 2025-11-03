@@ -124,10 +124,13 @@ function getGoogleClient() {
     $client->setClientId(GOOGLE_CLIENT_ID);
     $client->setClientSecret(GOOGLE_CLIENT_SECRET);
     $client->setRedirectUri(GOOGLE_REDIRECT_URI);
-    $client->addScope(Google_Service_Drive::DRIVE_FILE);
-    $client->addScope(Google_Service_Sheets::SPREADSHEETS);
+    
+    // Set proper scopes for Drive and Sheets access
+    $client->addScope(Google_Service_Drive::DRIVE); // Full Drive access
+    $client->addScope(Google_Service_Sheets::SPREADSHEETS); // Full Sheets access
     $client->addScope('email');
     $client->addScope('profile');
+    
     $client->setAccessType('offline');
     $client->setPrompt('select_account consent');
     
