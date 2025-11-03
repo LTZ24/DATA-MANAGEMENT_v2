@@ -5,17 +5,26 @@ require_once __DIR__ . '/../../includes/config.php';
 requireLogin();
 
 $id = isset($_GET['id']) ? intval($_GET['id']) : -1;
+$category = isset($_GET['category']) ? $_GET['category'] : '';
 
-if ($id < 0) {
+if ($id < 0 || empty($category)) {
     redirect(BASE_URL . '/pages/links/index.php');
 }
 
-$links = getLinksFromSheets();
+// Get categories
+$categories = getLinkCategories();
+
+if (!isset($categories[$category])) {
+    redirect(BASE_URL . '/pages/links/index.php?error=Kategori tidak valid');
+}
+
+$links = getLinksFromSheets($category);
 $link = null;
 
 foreach ($links as $l) {
     if ($l['id'] == $id) {
         $link = $l;
+        $link['category'] = $category;
         break;
     }
 }
@@ -30,16 +39,30 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title']);
     $url = sanitize($_POST['url']);
+    $newCategory = sanitize($_POST['category']);
     
-    if (empty($title) || empty($url)) {
-        $error = 'Judul dan URL harus diisi!';
+    if (empty($title) || empty($url) || empty($newCategory)) {
+        $error = 'Semua field harus diisi!';
+    } elseif (!isset($categories[$newCategory])) {
+        $error = 'Kategori tidak valid!';
     } else {
         try {
-            if (updateLinkInSheets($id, $title, $url)) {
-                $success = 'Link berhasil diupdate!';
-                header("refresh:2;url=index.php?success=Link berhasil diupdate");
+            // If category changed, delete from old and add to new
+            if ($newCategory !== $category) {
+                if (deleteLinkFromSheets($id, $category) && addLinkToSheets($title, $url, $newCategory)) {
+                    $success = 'Link berhasil dipindahkan ke kategori baru!';
+                    header("refresh:2;url=index.php?success=Link berhasil diupdate&category=" . $newCategory);
+                } else {
+                    $error = 'Gagal memindahkan link ke kategori baru!';
+                }
             } else {
-                $error = 'Gagal mengupdate link di Google Sheets!';
+                // Same category, just update
+                if (updateLinkInSheets($id, $title, $url, $category)) {
+                    $success = 'Link berhasil diupdate!';
+                    header("refresh:2;url=index.php?success=Link berhasil diupdate&category=" . $category);
+                } else {
+                    $error = 'Gagal mengupdate link di Google Sheets!';
+                }
             }
         } catch (Exception $e) {
             $error = 'Terjadi kesalahan: ' . $e->getMessage();
@@ -218,6 +241,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <form method="POST" action="">
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-folder"></i> Kategori *
+                        </label>
+                        <select id="category" name="category" required>
+                            <?php foreach ($categories as $key => $cat): ?>
+                                <option value="<?php echo $key; ?>" 
+                                        <?php echo ($link['category'] === $key) ? 'selected' : ''; ?>>
+                                    <?php echo $cat['name']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <small><i class="fas fa-info-circle"></i> Pilih kategori sesuai dengan jenis link</small>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="title">
                             <i class="fas fa-heading"></i> Judul Link *

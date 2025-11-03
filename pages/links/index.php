@@ -7,8 +7,28 @@ requireLogin();
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
 
-// Get links from Google Sheets
-$links = getLinksFromSheets();
+// Get selected category from query parameter
+$selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
+
+// Get all categories
+$categories = getLinkCategories();
+
+// Get links from Google Sheets (filtered by category if selected)
+if ($selectedCategory && isset($categories[$selectedCategory])) {
+    $links = getLinksFromSheets($selectedCategory);
+} else {
+    // Get all links from all categories
+    $links = [];
+    foreach ($categories as $key => $category) {
+        $categoryLinks = getLinksFromSheets($key);
+        foreach ($categoryLinks as $link) {
+            $link['category'] = $key;
+            $link['category_name'] = $category['name'];
+            $link['category_color'] = $category['color'];
+            $links[] = $link;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -116,6 +136,53 @@ $links = getLinksFromSheets();
             opacity: 0.5;
         }
         
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .category-btn {
+            padding: 0.625rem 1.25rem;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .category-btn.active {
+            color: white;
+            border-color: transparent;
+        }
+        
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .links-container {
@@ -167,6 +234,24 @@ $links = getLinksFromSheets();
                     </a>
                 </div>
                 
+                <!-- Category Filter -->
+                <div class="category-filter">
+                    <a href="index.php" 
+                       class="category-btn <?php echo empty($selectedCategory) ? 'active' : ''; ?>"
+                       style="<?php echo empty($selectedCategory) ? 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);' : ''; ?>">
+                        <i class="fas fa-th"></i>
+                        Semua Kategori
+                    </a>
+                    <?php foreach ($categories as $key => $category): ?>
+                        <a href="index.php?category=<?php echo $key; ?>" 
+                           class="category-btn <?php echo $selectedCategory === $key ? 'active' : ''; ?>"
+                           style="<?php echo $selectedCategory === $key ? 'background: ' . $category['color'] . ';' : ''; ?>">
+                            <i class="fas <?php echo $category['icon']; ?>"></i>
+                            <?php echo $category['name']; ?>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+                
                 <?php if (empty($links)): ?>
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
@@ -177,6 +262,12 @@ $links = getLinksFromSheets();
                         <?php foreach ($links as $link): ?>
                             <div class="link-item">
                                 <div class="link-info">
+                                    <?php if (isset($link['category_name'])): ?>
+                                        <div class="category-badge" style="background: <?php echo $link['category_color']; ?>">
+                                            <i class="fas <?php echo $categories[$link['category']]['icon']; ?>"></i>
+                                            <?php echo $link['category_name']; ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="link-title">
                                         <i class="fas fa-link"></i>
                                         <?php echo htmlspecialchars($link['title']); ?>
@@ -193,13 +284,13 @@ $links = getLinksFromSheets();
                                     </div>
                                 </div>
                                 <div class="link-actions">
-                                    <a href="edit.php?id=<?php echo $link['id']; ?>" 
+                                    <a href="edit.php?id=<?php echo $link['id']; ?>&category=<?php echo $link['category']; ?>" 
                                        class="btn btn-primary btn-sm" 
                                        title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form method="POST" 
-                                          action="delete.php?id=<?php echo $link['id']; ?>" 
+                                          action="delete.php?id=<?php echo $link['id']; ?>&category=<?php echo $link['category']; ?>" 
                                           style="display: inline;"
                                           data-ajax="true"
                                           onsubmit="return confirm('Apakah Anda yakin ingin menghapus link ini?');">

@@ -7,17 +7,23 @@ requireLogin();
 $error = '';
 $success = '';
 
+// Get categories
+$categories = getLinkCategories();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = sanitize($_POST['title']);
     $url = sanitize($_POST['url']);
+    $category = sanitize($_POST['category']);
     
-    if (empty($title) || empty($url)) {
-        $error = 'Judul dan URL harus diisi!';
+    if (empty($title) || empty($url) || empty($category)) {
+        $error = 'Semua field harus diisi!';
+    } elseif (!isset($categories[$category])) {
+        $error = 'Kategori tidak valid!';
     } else {
         try {
-            if (addLinkToSheets($title, $url)) {
+            if (addLinkToSheets($title, $url, $category)) {
                 $success = 'Link berhasil ditambahkan!';
-                header("refresh:2;url=index.php?success=Link berhasil ditambahkan");
+                header("refresh:2;url=index.php?success=Link berhasil ditambahkan&category=" . $category);
             } else {
                 $error = 'Gagal menambahkan link ke Google Sheets!';
             }
@@ -116,6 +122,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 0.875rem;
         }
         
+        .form-group select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--white);
+            cursor: pointer;
+        }
+        
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        
+        .category-option {
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
         .form-actions {
             display: flex;
             gap: 1rem;
@@ -197,6 +227,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 
                 <form method="POST" action="">
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-folder"></i> Kategori
+                        </label>
+                        <select id="category" name="category" required>
+                            <option value="">-- Pilih Kategori --</option>
+                            <?php foreach ($categories as $key => $category): ?>
+                                <option value="<?php echo $key; ?>" 
+                                        <?php echo (isset($_POST['category']) && $_POST['category'] === $key) ? 'selected' : ''; ?>>
+                                    <?php echo $category['name']; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <small><i class="fas fa-info-circle"></i> Pilih kategori sesuai dengan jenis link</small>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="title">
                             <i class="fas fa-heading"></i> Judul Link

@@ -36,6 +36,14 @@ define('FOLDER_DOKUMEN', 'your-dokumen-folder-id');
 // Create a Google Sheet and paste the ID here
 define('GOOGLE_SHEETS_ID', 'your-google-sheets-id');
 
+// Google Sheets IDs per Category (for Links & Forms)
+// You can use the same sheet with different tabs, or separate sheets per category
+// Each category will have tabs like: Links-Kesiswaan, Links-Kurikulum, Forms-Kesiswaan, etc.
+define('SHEETS_KESISWAAN', 'your-kesiswaan-sheets-id');
+define('SHEETS_KURIKULUM', 'your-kurikulum-sheets-id');
+define('SHEETS_SAPRAS_HUMAS', 'your-sapras-humas-sheets-id');
+define('SHEETS_TATA_USAHA', 'your-tata-usaha-sheets-id');
+
 // File Upload Configuration
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
 define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']);
