@@ -13,11 +13,9 @@ if (!isLoggedIn()) {
 $action = $_GET['action'] ?? '';
 
 try {
-    $db = getDBConnection();
-    
     switch ($action) {
         case 'getDashboardStats':
-            $stats = getDashboardStats($db);
+            $stats = getDashboardStats();
             echo json_encode(['success' => true, 'stats' => $stats]);
             break;
             
@@ -29,7 +27,7 @@ try {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 
-function getDashboardStats($db) {
+function getDashboardStats() {
     // Dashboard stats without guru data
     return [
         'total_files' => 0,
