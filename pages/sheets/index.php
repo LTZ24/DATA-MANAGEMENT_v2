@@ -64,15 +64,22 @@ requireLogin();
         
         <main class="main-content">
             <h1>Google Sheets Database</h1>
-            <p>Informasi dan akses ke Google Sheets yang digunakan untuk menyimpan data</p>
+            <p>Informasi dan akses ke Google Sheets yang digunakan untuk menyimpan data per kategori</p>
             
+            <?php
+            $categories = getCategories();
+            foreach ($categories as $catKey => $catData):
+            ?>
             <div class="sheets-info">
-                <h2><i class="fas fa-table"></i> Informasi Sheets</h2>
+                <h2>
+                    <i class="fas <?php echo $catData['icon']; ?>" style="color: <?php echo $catData['color']; ?>;"></i>
+                    <?php echo $catData['name']; ?>
+                </h2>
                 <div class="info-grid">
                     <div class="info-item">
                         <div class="info-label">Spreadsheet ID</div>
                         <div class="info-value" style="font-size: 0.875rem;">
-                            <?php echo GOOGLE_SHEETS_ID; ?>
+                            <?php echo $catData['sheets_id']; ?>
                         </div>
                     </div>
                     <div class="info-item" style="border-left-color: var(--success-color);">
@@ -82,46 +89,48 @@ requireLogin();
                         </div>
                     </div>
                     <div class="info-item" style="border-left-color: var(--info-color);">
-                        <div class="info-label">Sinkronisasi</div>
+                        <div class="info-label">Sheets</div>
                         <div class="info-value" style="color: var(--info-color);">
-                            <i class="fas fa-sync"></i> Real-time
+                            Links-<?php echo ucfirst($catKey); ?>, Forms-<?php echo ucfirst($catKey); ?>
                         </div>
                     </div>
                 </div>
                 
-                <div style="margin-top: 2rem;">
-                    <a href="https://docs.google.com/spreadsheets/d/<?php echo GOOGLE_SHEETS_ID; ?>" 
+                <div style="margin-top: 1.5rem;">
+                    <a href="https://docs.google.com/spreadsheets/d/<?php echo $catData['sheets_id']; ?>" 
                        target="_blank" 
-                       class="btn btn-primary">
+                       class="btn btn-primary"
+                       style="background: <?php echo $catData['color']; ?>; border-color: <?php echo $catData['color']; ?>;">
                         <i class="fas fa-external-link-alt"></i> Buka Google Sheets
                     </a>
                 </div>
             </div>
+            <?php endforeach; ?>
             
             <div class="sheets-preview">
-                <h2><i class="fas fa-list"></i> Sheet yang Tersedia</h2>
+                <h2><i class="fas fa-info-circle"></i> Informasi Struktur</h2>
                 <div style="display: grid; gap: 1rem; margin-top: 1rem;">
                     <div style="background: var(--light-color); padding: 1.5rem; border-radius: 0.375rem;">
                         <h3 style="margin-bottom: 0.5rem;">
-                            <i class="fas fa-link"></i> Links
+                            <i class="fas fa-link"></i> Tab Links-[Kategori]
                         </h3>
                         <p style="color: var(--secondary-color); margin-bottom: 1rem;">
-                            Menyimpan data links/tautan penting
+                            Menyimpan data links/tautan penting per kategori
                         </p>
                         <div style="font-size: 0.875rem; color: var(--secondary-color);">
-                            Kolom: Title, URL, Created At, Updated At
+                            Kolom: Title | URL | Created At | Updated At | Category
                         </div>
                     </div>
                     
                     <div style="background: var(--light-color); padding: 1.5rem; border-radius: 0.375rem;">
                         <h3 style="margin-bottom: 0.5rem;">
-                            <i class="fas fa-file-alt"></i> Forms
+                            <i class="fas fa-file-alt"></i> Tab Forms-[Kategori]
                         </h3>
                         <p style="color: var(--secondary-color); margin-bottom: 1rem;">
-                            Menyimpan data Google Forms
+                            Menyimpan data Google Forms per kategori
                         </p>
                         <div style="font-size: 0.875rem; color: var(--secondary-color);">
-                            Kolom: Title, URL, Created At, Updated At
+                            Kolom: Title | URL | Created At | Updated At | Category
                         </div>
                     </div>
                 </div>

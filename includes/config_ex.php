@@ -32,11 +32,7 @@ define('FOLDER_SERTIFIKASI', 'your-sertifikasi-folder-id');
 define('FOLDER_PELATIHAN', 'your-pelatihan-folder-id');
 define('FOLDER_DOKUMEN', 'your-dokumen-folder-id');
 
-// Google Sheets ID for Data Guru database
-// Create a Google Sheet and paste the ID here
-define('GOOGLE_SHEETS_ID', 'your-google-sheets-id');
-
-// Google Sheets IDs per Category (for Links & Forms)
+// Google Sheets IDs per Category
 // IMPORTANT: Buat Google Sheets terpisah untuk setiap kategori, atau gunakan 1 sheets dengan multiple tabs
 // Setiap sheets harus punya 2 tabs: "Links-[Kategori]" dan "Forms-[Kategori]"
 // Contoh untuk Kesiswaan: "Links-Kesiswaan" dan "Forms-Kesiswaan"
