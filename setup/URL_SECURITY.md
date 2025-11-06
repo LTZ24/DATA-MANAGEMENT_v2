@@ -1,3 +1,4 @@
+````markdown
 # URL & Information Hiding Security Guide
 
 ## 🔒 Fitur Security yang Diimplementasikan
@@ -413,3 +414,5 @@ if (!validateApiKey($apiKey)) {
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [PHP Security Best Practices](https://www.php.net/manual/en/security.php)
 - [Google OAuth Security](https://developers.google.com/identity/protocols/oauth2/security-best-practices)
+
+````

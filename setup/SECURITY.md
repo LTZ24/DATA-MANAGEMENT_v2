@@ -1,3 +1,4 @@
+````markdown
 # Security Documentation - Data Management System
 
 ## 🔒 Ringkasan Keamanan
@@ -267,3 +268,5 @@ Jika menemukan vulnerability, laporkan melalui:
 
 **Last Updated**: October 26, 2025
 **Security Audit**: ✅ PASSED (dengan catatan untuk implement HTTPS di production)
+
+````

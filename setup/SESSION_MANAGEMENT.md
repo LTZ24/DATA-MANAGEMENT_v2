@@ -1,3 +1,4 @@
+````markdown
 # Session Management - Data Management System
 
 ## 📋 Overview
@@ -342,3 +343,5 @@ if (isset($_SESSION['last_activity'])) {
 **Last Updated:** October 26, 2025  
 **Version:** 1.0  
 **Maintained by:** LTZ24
+
+````
