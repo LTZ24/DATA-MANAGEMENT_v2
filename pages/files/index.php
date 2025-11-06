@@ -153,6 +153,34 @@ $storageInfo = getDriveStorageInfo();
             margin-bottom: 1.5rem;
         }
         
+        .category-filter-dropdown {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box;
+        }
+        
+        .category-filter-dropdown select {
+            width: 100%;
+            max-width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: white;
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .category-filter-dropdown select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
         .category-filter-btn {
             padding: 0.75rem 1.5rem;
             border: 2px solid #e5e7eb;
@@ -333,6 +361,33 @@ $storageInfo = getDriveStorageInfo();
             margin-bottom: 1rem;
             opacity: 0.5;
         }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .category-filters {
+                display: none; /* Hide button filters on mobile */
+            }
+            
+            .category-filter-dropdown {
+                display: block; /* Show dropdown on mobile */
+                padding: 0 0.5rem;
+            }
+            
+            .filter-controls {
+                grid-template-columns: 1fr;
+                padding: 0 0.5rem;
+            }
+            
+            .files-header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -365,6 +420,18 @@ $storageInfo = getDriveStorageInfo();
             <?php endif; ?>
             
             <div class="files-container">
+                <!-- Mobile Category Dropdown -->
+                <div class="category-filter-dropdown">
+                    <select onchange="filterByCategory(this.value)">
+                        <option value="all">📁 Semua Kategori</option>
+                        <option value="kesiswaan">👥 Kesiswaan</option>
+                        <option value="kurikulum">📚 Kurikulum</option>
+                        <option value="sapras">🏢 Sapras & Humas</option>
+                        <option value="tata_usaha">💼 Tata Usaha</option>
+                    </select>
+                </div>
+                
+                <!-- Desktop Category Buttons -->
                 <div class="category-filters">
                     <button class="category-filter-btn active" onclick="filterByCategory('all')">
                         <i class="fas fa-th"></i> Semua Kategori

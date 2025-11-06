@@ -146,6 +146,36 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
             border-bottom: 2px solid var(--border-color);
         }
         
+        .category-filter-dropdown {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            box-sizing: border-box;
+        }
+        
+        .category-filter-dropdown select {
+            width: 100%;
+            max-width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: white;
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .category-filter-dropdown select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
         .category-btn {
             padding: 0.625rem 1.25rem;
             border: 2px solid var(--border-color);
@@ -186,7 +216,7 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         /* Responsive */
         @media (max-width: 768px) {
             .links-container {
-                padding: 1.5rem;
+                padding: 1rem;
             }
             
             .link-item {
@@ -200,6 +230,16 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
             
             .link-actions a {
                 flex: 1;
+            }
+            
+            /* Hide button filters, show dropdown on mobile */
+            .category-filter {
+                display: none;
+            }
+            
+            .category-filter-dropdown {
+                display: block;
+                padding: 0 0.5rem;
             }
         }
     </style>
@@ -234,7 +274,28 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
                     </a>
                 </div>
                 
-                <!-- Category Filter -->
+                <!-- Mobile Category Dropdown -->
+                <div class="category-filter-dropdown">
+                    <select onchange="window.location.href=this.value">
+                        <option value="index.php" <?php echo empty($selectedCategory) ? 'selected' : ''; ?>>📁 Semua Kategori</option>
+                        <?php foreach ($categories as $key => $category): ?>
+                            <option value="index.php?category=<?php echo $key; ?>" 
+                                    <?php echo $selectedCategory === $key ? 'selected' : ''; ?>>
+                                <?php 
+                                $icons = [
+                                    'kesiswaan' => '👥',
+                                    'kurikulum' => '📚',
+                                    'sapras_humas' => '🏢',
+                                    'tata_usaha' => '💼'
+                                ];
+                                echo $icons[$key] . ' ' . $category['name']; 
+                                ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <!-- Desktop Category Buttons -->
                 <div class="category-filter">
                     <a href="index.php" 
                        class="category-btn <?php echo empty($selectedCategory) ? 'active' : ''; ?>"
