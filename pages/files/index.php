@@ -164,16 +164,21 @@ $storageInfo = getDriveStorageInfo();
         .category-filter-dropdown select {
             width: 100%;
             max-width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
             border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            font-weight: 600;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
             background: white;
             color: var(--dark-color);
             cursor: pointer;
             transition: all 0.3s;
             box-sizing: border-box;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
         }
         
         .category-filter-dropdown select:focus {
@@ -423,11 +428,11 @@ $storageInfo = getDriveStorageInfo();
                 <!-- Mobile Category Dropdown -->
                 <div class="category-filter-dropdown">
                     <select onchange="filterByCategory(this.value)">
-                        <option value="all">📁 Semua Kategori</option>
-                        <option value="kesiswaan">👥 Kesiswaan</option>
-                        <option value="kurikulum">📚 Kurikulum</option>
-                        <option value="sapras">🏢 Sapras & Humas</option>
-                        <option value="tata_usaha">💼 Tata Usaha</option>
+                        <option value="all">Semua Kategori</option>
+                        <option value="kesiswaan">Kesiswaan</option>
+                        <option value="kurikulum">Kurikulum</option>
+                        <option value="sapras">Sapras & Humas</option>
+                        <option value="tata_usaha">Tata Usaha</option>
                     </select>
                 </div>
                 

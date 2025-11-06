@@ -158,16 +158,21 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         .category-filter-dropdown select {
             width: 100%;
             max-width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
             border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.9rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             background: white;
             color: var(--dark-color);
             cursor: pointer;
             transition: all 0.3s;
             box-sizing: border-box;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
         }
         
         .category-filter-dropdown select:focus {
@@ -277,19 +282,11 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
                 <!-- Mobile Category Dropdown -->
                 <div class="category-filter-dropdown">
                     <select onchange="window.location.href=this.value">
-                        <option value="index.php" <?php echo empty($selectedCategory) ? 'selected' : ''; ?>>📁 Semua Kategori</option>
+                        <option value="index.php" <?php echo empty($selectedCategory) ? 'selected' : ''; ?>>Semua Kategori</option>
                         <?php foreach ($categories as $key => $category): ?>
                             <option value="index.php?category=<?php echo $key; ?>" 
                                     <?php echo $selectedCategory === $key ? 'selected' : ''; ?>>
-                                <?php 
-                                $icons = [
-                                    'kesiswaan' => '👥',
-                                    'kurikulum' => '📚',
-                                    'sapras_humas' => '🏢',
-                                    'tata_usaha' => '💼'
-                                ];
-                                echo $icons[$key] . ' ' . $category['name']; 
-                                ?>
+                                <?php echo $category['name']; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
