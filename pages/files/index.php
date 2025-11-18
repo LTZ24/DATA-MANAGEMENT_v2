@@ -4,7 +4,10 @@ require_once __DIR__ . '/../../includes/config.php';
 
 requireLogin();
 
-// Get all files from Google Drive
+$cacheTime = 300;
+$cacheKey = 'files_cache';
+$storageCacheKey = 'storage_cache';
+
 function getFilesFromDrive() {
     try {
         $client = getGoogleClient();
@@ -57,7 +60,6 @@ function getFilesFromDrive() {
     }
 }
 
-// Get drive storage info
 function getDriveStorageInfo() {
     try {
         $client = getGoogleClient();
@@ -77,8 +79,25 @@ function getDriveStorageInfo() {
     }
 }
 
-$files = getFilesFromDrive();
-$storageInfo = getDriveStorageInfo();
+if (isset($_SESSION[$cacheKey]) && 
+    isset($_SESSION[$cacheKey . '_time']) && 
+    (time() - $_SESSION[$cacheKey . '_time']) < $cacheTime) {
+    $files = $_SESSION[$cacheKey];
+} else {
+    $files = getFilesFromDrive();
+    $_SESSION[$cacheKey] = $files;
+    $_SESSION[$cacheKey . '_time'] = time();
+}
+
+if (isset($_SESSION[$storageCacheKey]) && 
+    isset($_SESSION[$storageCacheKey . '_time']) && 
+    (time() - $_SESSION[$storageCacheKey . '_time']) < $cacheTime) {
+    $storageInfo = $_SESSION[$storageCacheKey];
+} else {
+    $storageInfo = getDriveStorageInfo();
+    $_SESSION[$storageCacheKey] = $storageInfo;
+    $_SESSION[$storageCacheKey . '_time'] = time();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -402,6 +421,8 @@ $storageInfo = getDriveStorageInfo();
         <?php include __DIR__ . '/../../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <div class="files-header">
                 <a href="upload.php" class="btn btn-primary">
                     <i class="fas fa-cloud-upload-alt"></i> Upload File
@@ -575,7 +596,6 @@ $storageInfo = getDriveStorageInfo();
         function filterByCategory(category) {
             currentCategory = category;
             
-            // Update active button
             document.querySelectorAll('.category-filter-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -597,17 +617,14 @@ $storageInfo = getDriveStorageInfo();
                 
                 let show = true;
                 
-                // Category filter
                 if (currentCategory !== 'all' && category !== currentCategory) {
                     show = false;
                 }
                 
-                // Search filter
                 if (searchTerm && !name.includes(searchTerm)) {
                     show = false;
                 }
                 
-                // Date filter
                 if (dateFilter && date !== dateFilter) {
                     show = false;
                 }
@@ -616,7 +633,6 @@ $storageInfo = getDriveStorageInfo();
                 if (show) visibleCount++;
             });
             
-            // Show/hide no results message
             document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
             document.getElementById('filesTable').style.display = visibleCount === 0 ? 'none' : 'table';
         }

@@ -83,6 +83,8 @@ $categories = getDriveCategories();
         <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
         
         <main class="main-content">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <h1>Folder Google Drive</h1>
             <p>Akses cepat ke folder-folder penting di Google Drive SMKN 62 Jakarta</p>
             

@@ -11,7 +11,6 @@ if ($id < 0 || empty($category)) {
     redirect(BASE_URL . '/pages/links/index.php');
 }
 
-// Get categories
 $categories = getLinkCategories();
 
 if (!isset($categories[$category])) {
@@ -212,6 +211,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
         
         <main class="main-content">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <div class="page-header">
                 <h1><i class="fas fa-edit"></i> Edit Link</h1>
                 <a href="index.php" class="btn btn-secondary">
@@ -293,7 +294,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/ajax.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
 </body>

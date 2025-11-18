@@ -53,7 +53,6 @@ class AjaxLoader {
 
     async loadPage(url, pushState = true) {
         try {
-            // Check cache first - use cache immediately without loading
             if (this.cache.has(url)) {
                 const cachedContent = this.cache.get(url);
                 this.updateContent(cachedContent);
@@ -65,7 +64,6 @@ class AjaxLoader {
 
             this.showLoading();
 
-            // Set timeout for fetch (10 seconds max)
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
 
@@ -85,7 +83,6 @@ class AjaxLoader {
 
             const html = await response.text();
             
-            // Cache the response (limit cache size to 10 pages)
             if (this.cache.size >= 10) {
                 const firstKey = this.cache.keys().next().value;
                 this.cache.delete(firstKey);
@@ -146,7 +143,6 @@ class AjaxLoader {
                     }, 1000);
                 }
                 
-                // Clear cache for this page
                 this.cache.delete(window.location.pathname);
             } else {
                 this.showError(result.message || 'Terjadi kesalahan');
@@ -161,7 +157,6 @@ class AjaxLoader {
     }
 
     updateContent(html) {
-        // Extract main content from response
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
@@ -169,10 +164,8 @@ class AjaxLoader {
         const currentContent = document.querySelector('.main-content');
         
         if (newContent && currentContent) {
-            // Use faster innerHTML replacement
             currentContent.innerHTML = newContent.innerHTML;
             
-            // Scroll to top instantly (no smooth animation for speed)
             window.scrollTo(0, 0);
             
             // Re-initialize event listeners only for AJAX-enabled elements
@@ -220,11 +213,9 @@ class AjaxLoader {
     }
 }
 
-// Initialize AJAX loader when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     window.ajaxLoader = new AjaxLoader();
 
-    // Handle browser back/forward buttons
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.url) {
             window.ajaxLoader.loadPage(e.state.url, false);

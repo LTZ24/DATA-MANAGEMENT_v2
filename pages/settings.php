@@ -7,12 +7,10 @@ requireLogin();
 $success = '';
 $error = '';
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'clear_cache':
-                // Clear session data (except essential login info)
                 $essential = [
                     'access_token',
                     'user_id',
@@ -199,6 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include __DIR__ . '/../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../includes/page-navigation.php'; ?>
             <div class="settings-container">
                 
                 <?php if ($success): ?>
@@ -214,36 +213,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php echo htmlspecialchars($error); ?>
                     </div>
                 <?php endif; ?>
-                
-                <!-- Tampilan -->
-                <div class="settings-section">
-                    <h2><i class="fas fa-palette"></i> Tampilan</h2>
-                    
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Bahasa / Language</h3>
-                            <p>Pilih bahasa tampilan aplikasi</p>
-                        </div>
-                        <div class="setting-action">
-                            <select id="languageSelect" class="form-control" style="width: 200px;">
-                                <option value="id">🇮🇩 Bahasa Indonesia</option>
-                                <option value="en">🇬🇧 English</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Status Sidebar</h3>
-                            <p>Sidebar saat ini: <strong id="sidebarStatus">Normal</strong></p>
-                        </div>
-                        <div class="setting-action">
-                            <span class="badge badge-success">
-                                <i class="fas fa-check"></i> Aktif
-                            </span>
-                        </div>
-                    </div>
-                </div>
                 
                 <!-- Data & Cache -->
                 <div class="settings-section">
@@ -327,50 +296,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
-    <script>
-        // Update sidebar status display
-        function updateSidebarStatus() {
-            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-            const statusEl = document.getElementById('sidebarStatus');
-            if (statusEl) {
-                statusEl.textContent = isCollapsed ? 'Collapsed (Diperkecil)' : 'Normal (Diperlebar)';
-            }
-        }
-        
-        // Language Switcher
-        function initLanguageSwitcher() {
-            const languageSelect = document.getElementById('languageSelect');
-            const currentLang = localStorage.getItem('language') || 'id';
-            
-            // Set initial state
-            if (languageSelect) {
-                languageSelect.value = currentLang;
-            }
-            
-            // Change language
-            if (languageSelect) {
-                languageSelect.addEventListener('change', function() {
-                    const selectedLang = this.value;
-                    localStorage.setItem('language', selectedLang);
-                    
-                    // Show confirmation
-                    alert(selectedLang === 'id' ? 
-                        'Bahasa berhasil diubah ke Bahasa Indonesia' : 
-                        'Language successfully changed to English');
-                    
-                    // Reload page to apply language
-                    window.location.reload();
-                });
-            }
-        }
-        
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSidebarStatus();
-            initLanguageSwitcher();
-        });
-    </script>
 </body>
 </html>

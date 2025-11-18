@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Error - Data Management System</title>
-    <link rel="icon" type="image/png" href="assets/images/smk62.png">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#50e3c2">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    
     <style>
         * {
             margin: 0;
@@ -14,7 +20,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #50e3c2 0%, #4dd0e1 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -35,7 +41,7 @@
         .error-code {
             font-size: 80px;
             font-weight: 700;
-            color: #667eea;
+            color: #50e3c2;
             margin-bottom: 20px;
             line-height: 1;
         }
@@ -56,7 +62,7 @@
         
         .btn-home {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #50e3c2 0%, #4dd0e1 100%);
             color: white;
             padding: 14px 32px;
             border-radius: 8px;
@@ -67,7 +73,7 @@
         
         .btn-home:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(80, 227, 194, 0.4);
         }
         
         .error-icon {

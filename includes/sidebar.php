@@ -1,18 +1,22 @@
 <div class="sidebar" id="sidebar">
-    <!-- Restore sidebar state immediately to prevent flash -->
     <script>
         (function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
             if (window.innerWidth > 1024) {
                 const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
                 if (isCollapsed) {
-                    document.getElementById('sidebar').classList.add('collapsed');
+                    if (sidebar) {
+                        sidebar.classList.add('collapsed');
+                    }
+                    if (mainContent) {
+                        mainContent.classList.add('sidebar-collapsed');
+                    }
                 }
             }
-            // Enable transitions after page fully loaded
-            setTimeout(function() {
-                document.getElementById('sidebar').classList.add('transition-enabled');
-                document.body.classList.add('page-loaded');
-            }, 100);
+            
+            document.body.classList.add('page-loaded');
         })();
     </script>
 
@@ -28,71 +32,47 @@
         </button>
     </div>
 
-    <div class="sidebar-user">
-        <div class="user-avatar">
-            <?php if (isset($_SESSION['user_picture']) && !empty($_SESSION['user_picture'])): ?>
-                <img src="<?php echo htmlspecialchars($_SESSION['user_picture']); ?>" 
-                     alt="Profile" 
-                     style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
-            <?php else: ?>
-                <i class="fas fa-user-circle"></i>
-            <?php endif; ?>
-        </div>
-        <div class="user-info">
-            <h4><?php echo htmlspecialchars($_SESSION['user_name'] ?? $_SESSION['username'] ?? 'User'); ?></h4>
-            <p><?php echo __('admin'); ?></p>
-        </div>
-    </div>
-
     <nav class="sidebar-menu">
         <ul>
             <li class="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php' && strpos($_SERVER['PHP_SELF'], '/pages/') === false) ? 'active' : ''; ?>">
-                <a href="<?php echo BASE_URL; ?>/index.php" data-tooltip="<?php echo __('nav_dashboard'); ?>">
+                <a href="<?php echo BASE_URL; ?>/index.php" data-tooltip="Dashboard">
                     <i class="fas fa-tachometer-alt"></i>
-                    <span><?php echo __('nav_dashboard'); ?></span>
+                    <span>Dashboard</span>
                 </a>
             </li>
 
             <li class="<?php echo (strpos($_SERVER['PHP_SELF'], '/pages/links/') !== false) ? 'active' : ''; ?>">
-                <a href="<?php echo BASE_URL; ?>/pages/links/index.php" data-tooltip="<?php echo __('nav_links'); ?>">
+                <a href="<?php echo BASE_URL; ?>/pages/links/index.php" data-tooltip="Kelola Links">
                     <i class="fas fa-link"></i>
-                    <span><?php echo __('nav_links'); ?></span>
+                    <span>Kelola Links</span>
                 </a>
             </li>
 
             <li class="<?php echo (strpos($_SERVER['PHP_SELF'], '/pages/forms/') !== false) ? 'active' : ''; ?>">
-                <a href="<?php echo BASE_URL; ?>/pages/forms/index.php" data-tooltip="<?php echo __('nav_forms'); ?>">
+                <a href="<?php echo BASE_URL; ?>/pages/forms/index.php" data-tooltip="Kelola Forms">
                     <i class="fas fa-file-alt"></i>
-                    <span><?php echo __('nav_forms'); ?></span>
+                    <span>Kelola Forms</span>
                 </a>
             </li>
 
-            <li class="menu-separator">
-                <span><?php echo __('nav_file_management'); ?></span>
-            </li>
-
             <li class="<?php echo (strpos($_SERVER['PHP_SELF'], '/pages/files/') !== false && strpos($_SERVER['PHP_SELF'], 'upload.php') === false) ? 'active' : ''; ?>">
-                <a href="<?php echo BASE_URL; ?>/pages/files/index.php" data-tooltip="<?php echo __('nav_file_manager'); ?>">
+                <a href="<?php echo BASE_URL; ?>/pages/files/index.php" data-tooltip="File Manager">
                     <i class="fas fa-folder-open"></i>
-                    <span><?php echo __('nav_file_manager'); ?></span>
+                    <span>File Manager</span>
                 </a>
             </li>
 
             <li class="<?php echo (strpos($_SERVER['PHP_SELF'], '/pages/files/upload.php') !== false) ? 'active' : ''; ?>">
-                <a href="<?php echo BASE_URL; ?>/pages/files/upload.php" data-tooltip="<?php echo __('nav_upload'); ?>">
+                <a href="<?php echo BASE_URL; ?>/pages/files/upload.php" data-tooltip="Upload File">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <span><?php echo __('nav_upload'); ?></span>
+                    <span>Upload File</span>
                 </a>
             </li>
 
-            <li class="menu-separator">
-                <span><?php echo __('nav_account'); ?></span>
-            </li>
-
             <li>
-                <a href="<?php echo BASE_URL; ?>/auth/logout.php" data-tooltip="<?php echo __('logout'); ?>">
+                <a href="<?php echo BASE_URL; ?>/auth/logout.php" data-tooltip="Keluar">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span><?php echo __('logout'); ?></span>
+                    <span>Keluar</span>
                 </a>
             </li>
         </ul>
@@ -142,7 +122,6 @@
             sidebarOverlay.classList.remove('active');
         });
 
-        // Update main-content class
         if (window.innerWidth > 1024) {
             const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
             if (isCollapsed && sidebar.classList.contains('collapsed')) {
@@ -150,7 +129,6 @@
             }
         }
 
-        // Handle resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 1024) {
                 sidebar.classList.remove('active');

@@ -226,9 +226,8 @@
             <strong>Repository:</strong> <a href="https://github.com/LTZ24/DATA-MANAGEMENT_v2" target="_blank">DATA-MANAGEMENT_v2</a>
         </p>
 
+
         <a href="auth/login.php" class="back-link">← Back to Login</a>
     </div>
 </body>
 </html>
-
-

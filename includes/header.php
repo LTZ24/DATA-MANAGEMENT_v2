@@ -15,31 +15,31 @@
             ];
             
             // Detect page title
-            $title = __('dashboard_title');
+            $title = 'Dashboard';
             if (strpos($_SERVER['PHP_SELF'], '/pages/links/') !== false) {
                 if (strpos($_SERVER['PHP_SELF'], 'add.php') !== false) {
-                    $title = __('add_link');
+                    $title = 'Tambah Link';
                 } elseif (strpos($_SERVER['PHP_SELF'], 'edit.php') !== false) {
-                    $title = __('edit_link');
+                    $title = 'Edit Link';
                 } else {
-                    $title = __('links_title');
+                    $title = 'Kelola Links';
                 }
             } elseif (strpos($_SERVER['PHP_SELF'], '/pages/forms/') !== false) {
                 if (strpos($_SERVER['PHP_SELF'], 'add.php') !== false) {
-                    $title = __('add_form');
+                    $title = 'Tambah Form';
                 } elseif (strpos($_SERVER['PHP_SELF'], 'edit.php') !== false) {
-                    $title = __('edit_form');
+                    $title = 'Edit Form';
                 } else {
-                    $title = __('forms_title');
+                    $title = 'Kelola Forms';
                 }
             } elseif (strpos($_SERVER['PHP_SELF'], '/pages/files/upload.php') !== false) {
-                $title = __('upload_file_title');
+                $title = 'Upload File';
             } elseif (strpos($_SERVER['PHP_SELF'], '/pages/files/') !== false) {
-                $title = __('file_manager_title');
+                $title = 'File Manager';
             } elseif (strpos($_SERVER['PHP_SELF'], '/pages/settings.php') !== false) {
-                $title = __('settings_title');
+                $title = 'Pengaturan';
             } elseif (strpos($_SERVER['PHP_SELF'], '/pages/profile.php') !== false) {
-                $title = __('profile_title');
+                $title = 'Profil Saya';
             }
             ?>
             <h2><?php echo $title; ?></h2>
@@ -85,23 +85,29 @@
                     </div>
                 </div>
 
+                <!-- DateTime for Mobile -->
+                <div class="dropdown-datetime-mobile">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="currentDateTimeMobile"></span>
+                </div>
+
                 <div class="dropdown-divider"></div>
 
                 <div class="dropdown-menu-items">
                     <a href="<?php echo BASE_URL; ?>/pages/profile.php" class="dropdown-item">
                         <i class="fas fa-user-circle"></i>
-                        <span><?php echo __('profile'); ?></span>
+                        <span>Profil</span>
                     </a>
                     <a href="<?php echo BASE_URL; ?>/pages/settings.php" class="dropdown-item">
                         <i class="fas fa-cog"></i>
-                        <span><?php echo __('settings'); ?></span>
+                        <span>Pengaturan</span>
                     </a>
                     
                     <div class="dropdown-divider"></div>
                     
                     <a href="<?php echo BASE_URL; ?>/auth/logout.php" class="dropdown-item logout-item">
                         <i class="fas fa-sign-out-alt"></i>
-                        <span><?php echo __('logout'); ?></span>
+                        <span>Keluar</span>
                     </a>
                 </div>
             </div>
@@ -110,23 +116,13 @@
 </header>
 
 <script>
-    // Date Time Update with i18n support
+    // Date Time Update (Indonesian only)
     function updateDateTime() {
         const now = new Date();
-        const lang = localStorage.getItem('language') || 'id';
         
-        // Indonesian
-        const daysID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const monthsID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
                          'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        
-        // English
-        const daysEN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const monthsEN = ['January', 'February', 'March', 'April', 'May', 'June',
-                         'July', 'August', 'September', 'October', 'November', 'December'];
-        
-        const days = lang === 'en' ? daysEN : daysID;
-        const months = lang === 'en' ? monthsEN : monthsID;
 
         const dayName = days[now.getDay()];
         const day = now.getDate();
@@ -138,8 +134,13 @@
 
         const dateTimeString = `${dayName}, ${day} ${month} ${year} - ${hours}:${minutes}:${seconds} WIB`;
         const dateTimeElement = document.getElementById('currentDateTime');
+        const dateTimeMobileElement = document.getElementById('currentDateTimeMobile');
+        
         if (dateTimeElement) {
             dateTimeElement.textContent = dateTimeString;
+        }
+        if (dateTimeMobileElement) {
+            dateTimeMobileElement.textContent = dateTimeString;
         }
     }
 

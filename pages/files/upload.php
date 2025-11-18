@@ -40,7 +40,6 @@ $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $category = sanitize($_POST['category']);
-    $description = sanitize($_POST['description']);
     
     if (!isset($categories[$category])) {
         $error = 'Kategori tidak valid!';
@@ -57,8 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
             
             $fileMetadata = new Google_Service_Drive_DriveFile([
                 'name' => $file['name'],
-                'parents' => [$folderId],
-                'description' => $description
+                'parents' => [$folderId]
             ]);
             
             $content = file_get_contents($file['tmp_name']);
@@ -338,6 +336,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
             padding: 0.75rem 1.5rem;
             border-radius: 0.5rem;
         }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .category-selector {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .category-card {
+                padding: 1rem;
+            }
+            
+            .category-card i {
+                font-size: 1.75rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .category-card .category-name {
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .category-selector {
+                gap: 0.5rem;
+            }
+            
+            .category-card {
+                padding: 0.75rem;
+            }
+            
+            .category-card i {
+                font-size: 1.5rem;
+                margin-bottom: 0.4rem;
+            }
+            
+            .category-card .category-name {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -347,11 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         <?php include __DIR__ . '/../../includes/header.php'; ?>
         
         <div class="content-wrapper">
-            <div class="page-header">
-                <a href="index.php" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Kembali
-                </a>
-            </div>
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
             
             <?php if ($success): ?>
                 <div class="alert alert-success" data-persistent>
@@ -421,19 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
                         <small><i class="fas fa-info-circle"></i> File akan langsung terupload ke Google Drive setelah submit</small>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="description">
-                            <i class="fas fa-comment-alt"></i> Deskripsi (Opsional)
-                        </label>
-                        <textarea id="description" name="description" 
-                                  placeholder="Tambahkan keterangan tentang file ini..."><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
-                        <small><i class="fas fa-info-circle"></i> Tambahkan keterangan untuk memudahkan pencarian file nanti</small>
-                    </div>
-                    
                     <div class="form-actions">
-                        <a href="index.php" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Batal
-                        </a>
                         <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
                             <i class="fas fa-cloud-upload-alt"></i> Upload File
                         </button>
@@ -445,7 +468,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/ajax.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
     <script>
@@ -511,12 +533,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
         }
         
         function selectCategory(category, element) {
-            // Remove selected class from all
             document.querySelectorAll('.category-card').forEach(card => {
                 card.classList.remove('selected');
             });
             
-            // Add selected class to clicked
             element.classList.add('selected');
             categoryInput.value = category;
             checkFormValid();

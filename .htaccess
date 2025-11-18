@@ -2,6 +2,27 @@
 # Security Configuration - Data Management System
 # ==============================================================================
 
+# Enable Rewrite Engine
+RewriteEngine On
+RewriteBase /Data-Base-Guru-v2/
+
+# Remove .php extension from URLs
+# If the request is for a file that exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Add .php extension if file exists
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
+# Redirect .php URLs to non-.php URLs
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
+RewriteRule ^ %1 [R=301,L]
+
+# Remove trailing slash from URLs (except directories)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [R=301,L]
+
 # Disable Directory Listing
 Options -Indexes
 

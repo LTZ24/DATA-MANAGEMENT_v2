@@ -33,38 +33,26 @@ define('FOLDER_PELATIHAN', 'your-pelatihan-folder-id');
 define('FOLDER_DOKUMEN', 'your-dokumen-folder-id');
 
 // Google Sheets IDs per Category
-// IMPORTANT: Buat Google Sheets terpisah untuk setiap kategori, atau gunakan 1 sheets dengan multiple tabs
-// Setiap sheets harus punya 2 tabs: "Links-[Kategori]" dan "Forms-[Kategori]"
-// Contoh untuk Kesiswaan: "Links-Kesiswaan" dan "Forms-Kesiswaan"
-// Lihat CARA_SETUP_SHEETS_KATEGORI.md untuk panduan lengkap
-// 
-// OPTION 1: Gunakan sheets terpisah (4 sheets berbeda)
-define('SHEETS_KESISWAAN', 'your-kesiswaan-sheets-id-disini');
-define('SHEETS_KURIKULUM', 'your-kurikulum-sheets-id-disini');
-define('SHEETS_SAPRAS_HUMAS', 'your-sapras-humas-sheets-id-disini');
-define('SHEETS_TATA_USAHA', 'your-tata-usaha-sheets-id-disini');
-// 
-// OPTION 2: Gunakan 1 sheets dengan multiple tabs (copy ID yang sama ke semua)
-// define('SHEETS_KESISWAAN', 'same-sheets-id-for-all');
-// define('SHEETS_KURIKULUM', 'same-sheets-id-for-all');
-// define('SHEETS_SAPRAS_HUMAS', 'same-sheets-id-for-all');
-// define('SHEETS_TATA_USAHA', 'same-sheets-id-for-all');
+// Format tabs: "Links-[Kategori]" dan "Forms-[Kategori]"
+define('SHEETS_KESISWAAN', 'your-kesiswaan-sheets-id');
+define('SHEETS_KURIKULUM', 'your-kurikulum-sheets-id');
+define('SHEETS_SAPRAS_HUMAS', 'your-sapras-humas-sheets-id');
+define('SHEETS_TATA_USAHA', 'your-tata-usaha-sheets-id');
 
 // File Upload Configuration
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
 define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']);
 define('UPLOAD_DIR', __DIR__ . '/../data/uploads/');
 
-// Session Configuration
+// Session Configuration (30 minutes timeout)
 if (session_status() == PHP_SESSION_NONE) {
-    ini_set('session.gc_maxlifetime', 1800); // 30 minutes
+    ini_set('session.gc_maxlifetime', 1800);
     ini_set('session.cookie_lifetime', 1800);
     ini_set('session.cookie_httponly', 1);
     ini_set('session.use_only_cookies', 1);
-    ini_set('session.cookie_secure', 0); // Set to 1 if using HTTPS
+    ini_set('session.cookie_secure', 0);
     session_start();
     
-    // Initialize session creation time
     if (!isset($_SESSION['created'])) {
         $_SESSION['created'] = time();
     } else if (time() - $_SESSION['created'] > 1800) {
@@ -72,16 +60,13 @@ if (session_status() == PHP_SESSION_NONE) {
         $_SESSION['created'] = time();
     }
     
-    // Check for inactivity timeout
     if (isset($_SESSION['last_activity'])) {
         $inactive_time = time() - $_SESSION['last_activity'];
         
-        // If inactive for more than 30 minutes, destroy session
         if ($inactive_time > 1800) {
             session_unset();
             session_destroy();
             
-            // Redirect to login if not already on login page
             if (!strpos($_SERVER['REQUEST_URI'], '/auth/login.php')) {
                 header('Location: ' . BASE_URL . '/auth/login.php?session_timeout=1');
                 exit();
@@ -89,14 +74,9 @@ if (session_status() == PHP_SESSION_NONE) {
         }
     }
     
-    // Update last activity time on each request
     $_SESSION['last_activity'] = time();
 }
 
-// i18n - Internationalization
-require_once __DIR__ . '/i18n.php';
-
-// Handle AJAX session update requests
 if (isset($_SERVER['HTTP_X_SESSION_UPDATE']) && $_SERVER['HTTP_X_SESSION_UPDATE'] === 'true') {
     if (session_status() == PHP_SESSION_ACTIVE) {
         $_SESSION['last_activity'] = time();
@@ -139,21 +119,18 @@ function getGoogleClient() {
     $client->setClientSecret(GOOGLE_CLIENT_SECRET);
     $client->setRedirectUri(GOOGLE_REDIRECT_URI);
     
-    // Set proper scopes for Drive and Sheets access
-    $client->addScope(Google_Service_Drive::DRIVE); // Full Drive access
-    $client->addScope(Google_Service_Sheets::SPREADSHEETS); // Full Sheets access
+    $client->addScope(Google_Service_Drive::DRIVE);
+    $client->addScope(Google_Service_Sheets::SPREADSHEETS);
     $client->addScope('email');
     $client->addScope('profile');
     
     $client->setAccessType('offline');
     $client->setPrompt('select_account consent');
     
-    // Load previously authorized credentials from session
     if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
         $client->setAccessToken($_SESSION['access_token']);
     }
     
-    // Refresh the token if it's expired
     if ($client->isAccessTokenExpired()) {
         if ($client->getRefreshToken()) {
             $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
@@ -180,7 +157,6 @@ function isLoggedIn() {
         return false;
     }
     
-    // Check session timeout
     if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
         logoutUser(true);
         return false;
@@ -221,12 +197,12 @@ function logoutUser($isTimeout = false) {
     exit;
 }
 
-// Google Sheets Functions for Links & Forms
+// Google Sheets Functions
 function getLinksFromSheets() {
     try {
         $service = getSheetsService();
         $spreadsheetId = GOOGLE_SHEETS_ID;
-        $range = 'Links!A2:D'; // Skip header row
+        $range = 'Links!A2:D';
         
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
@@ -259,7 +235,7 @@ function getFormsFromSheets() {
     try {
         $service = getSheetsService();
         $spreadsheetId = GOOGLE_SHEETS_ID;
-        $range = 'Forms!A2:D'; // Skip header row
+        $range = 'Forms!A2:D';
         
         $response = $service->spreadsheets_values->get($spreadsheetId, $range);
         $values = $response->getValues();
@@ -516,7 +492,6 @@ function deleteFormFromSheets($index) {
     }
 }
 
-// Get folder categories
 function getDriveCategories() {
     return [
         'kesiswaan' => [
@@ -546,12 +521,10 @@ function getDriveCategories() {
     ];
 }
 
-// Get link categories (same as drive categories)
 function getLinkCategories() {
     return getDriveCategories();
 }
 
-// Get form categories (same as drive categories)
 function getFormCategories() {
     return getDriveCategories();
 }

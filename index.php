@@ -2,7 +2,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/config.php';
 
-// Check if user is logged in
 requireLogin();
 ?>
 <!DOCTYPE html>
@@ -11,7 +10,24 @@ requireLogin();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Database Guru SMKN 62 Jakarta</title>
-    <link rel="icon" type="image/png" href="assets/images/smk62.png">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#50e3c2">
+    <meta name="description" content="Sistem Manajemen Database Guru SMK Negeri 62 Jakarta">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DB Guru 62">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="assets/images/icons/apple-touch-icon.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -23,63 +39,88 @@ requireLogin();
         
         <div class="content-wrapper">
             <div class="dashboard">
-                <h1><?php echo __('dashboard_title'); ?></h1>
-                <p><?php echo __('dashboard_welcome'); ?>, <?php echo htmlspecialchars($_SESSION['user_name'] ?? $_SESSION['username'] ?? 'User'); ?>!</p>
+                <h1>Dashboard</h1>
+                <p>Selamat datang, <?php echo htmlspecialchars($_SESSION['user_name'] ?? $_SESSION['username'] ?? 'User'); ?>!</p>
                 
                 <?php
-                // Get links and forms from Google Sheets
-                $links = getLinksFromSheets();
-                $forms = getFormsFromSheets();
+                $cacheTime = 300;
                 
-                // Get storage info and recent uploads
-                try {
-                    $client = getGoogleClient();
-                    $driveService = new Google_Service_Drive($client);
+                if (!isset($_SESSION['dashboard_cache']) || 
+                    !isset($_SESSION['dashboard_cache_time']) || 
+                    (time() - $_SESSION['dashboard_cache_time']) > $cacheTime) {
                     
-                    // Get storage quota
-                    $about = $driveService->about->get(['fields' => 'storageQuota']);
-                    $quota = $about->getStorageQuota();
-                    $storagePercent = round(($quota->getUsage() / $quota->getLimit()) * 100, 2);
-                    $storageUsed = formatFileSize($quota->getUsage());
-                    $storageTotal = formatFileSize($quota->getLimit());
-                    $storageRemaining = formatFileSize($quota->getLimit() - $quota->getUsage());
+                    $links = getLinksFromSheets();
+                    $forms = getFormsFromSheets();
                     
-                    // Count total files
-                    $filesResult = $driveService->files->listFiles([
-                        'q' => "mimeType != 'application/vnd.google-apps.folder' and trashed = false",
-                        'fields' => 'files(id)',
-                        'pageSize' => 1000
-                    ]);
-                    $totalFiles = count($filesResult->getFiles());
+                    try {
+                        $client = getGoogleClient();
+                        $driveService = new Google_Service_Drive($client);
+                        
+                        $about = $driveService->about->get(['fields' => 'storageQuota']);
+                        $quota = $about->getStorageQuota();
+                        $storagePercent = round(($quota->getUsage() / $quota->getLimit()) * 100, 2);
+                        $storageUsed = formatFileSize($quota->getUsage());
+                        $storageTotal = formatFileSize($quota->getLimit());
+                        $storageRemaining = formatFileSize($quota->getLimit() - $quota->getUsage());
+                        
+                        $filesResult = $driveService->files->listFiles([
+                            'q' => "mimeType != 'application/vnd.google-apps.folder' and trashed = false",
+                            'fields' => 'files(id)',
+                            'pageSize' => 100
+                        ]);
+                        $totalFiles = count($filesResult->getFiles());
+                        
+                        $recentFiles = $driveService->files->listFiles([
+                            'q' => "mimeType != 'application/vnd.google-apps.folder' and trashed = false",
+                            'orderBy' => 'createdTime desc',
+                            'fields' => 'files(id, name, createdTime, mimeType, size)',
+                            'pageSize' => 5
+                        ]);
+                        $uploads = $recentFiles->getFiles();
+                        
+                    } catch (Exception $e) {
+                        $storagePercent = 0;
+                        $storageUsed = '0 KB';
+                        $storageTotal = '0 KB';
+                        $storageRemaining = '0 KB';
+                        $totalFiles = 0;
+                        $uploads = [];  
+                    }
                     
-                    // Get recent uploads (last 5 files)
-                    $recentFiles = $driveService->files->listFiles([
-                        'q' => "mimeType != 'application/vnd.google-apps.folder' and trashed = false",
-                        'orderBy' => 'createdTime desc',
-                        'fields' => 'files(id, name, createdTime, mimeType, size)',
-                        'pageSize' => 5
-                    ]);
-                    $uploads = $recentFiles->getFiles();
+                    $_SESSION['dashboard_cache'] = [
+                        'links' => $links,
+                        'forms' => $forms,
+                        'storagePercent' => $storagePercent,
+                        'storageUsed' => $storageUsed,
+                        'storageTotal' => $storageTotal,
+                        'storageRemaining' => $storageRemaining,
+                        'totalFiles' => $totalFiles,
+                        'uploads' => $uploads
+                    ];
+                    $_SESSION['dashboard_cache_time'] = time();
                     
-                } catch (Exception $e) {
-                    $storagePercent = 0;
-                    $storageUsed = '0 KB';
-                    $storageTotal = '0 KB';
-                    $storageRemaining = '0 KB';
-                    $totalFiles = 0;
-                    $uploads = [];
+                } else {
+                    $cache = $_SESSION['dashboard_cache'];
+                    $links = $cache['links'];
+                    $forms = $cache['forms'];
+                    $storagePercent = $cache['storagePercent'];
+                    $storageUsed = $cache['storageUsed'];
+                    $storageTotal = $cache['storageTotal'];
+                    $storageRemaining = $cache['storageRemaining'];
+                    $totalFiles = $cache['totalFiles'];
+                    $uploads = $cache['uploads'];
                 }
                 ?>
                 
                 <div class="stats-grid">
                     <!-- Card 1: Storage Google Drive -->
-                    <div class="stat-card">
+                    <div class="stat-card storage-card">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
                             <i class="fas fa-hdd" style="font-size: 2.5rem; color: var(--primary-color);"></i>
                             <div>
-                                <h3 style="margin: 0; font-size: 1rem;"><?php echo __('storage_google_drive'); ?></h3>
+                                <h3 style="margin: 0; font-size: 1rem;">Storage Google Drive</h3>
                                 <p style="margin: 0; font-size: 0.875rem; color: var(--secondary-color);">
-                                    <?php echo $storageRemaining; ?> <?php echo __('storage_remaining'); ?> <?php echo __('storage_used'); ?> <?php echo $storageTotal; ?>
+                                    <?php echo $storageRemaining; ?> tersisa terpakai dari <?php echo $storageTotal; ?>
                                 </p>
                             </div>
                         </div>
@@ -119,46 +160,14 @@ requireLogin();
                         </div>
                     </div>
                     
-                    <!-- Card 2: Total Links -->
-                    <div class="stat-card">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                            <i class="fas fa-link" style="font-size: 2.5rem; color: var(--primary-color);"></i>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;"><?php echo __('total_links'); ?></h3>
-                                <p style="margin: 0; font-size: 0.875rem; color: var(--secondary-color);">
-                                    <?php echo __('nav_links'); ?>
-                                </p>
-                            </div>
-                        </div>
-                        <p class="stat-number" style="font-size: 3rem; font-weight: 700; margin: 0; color: var(--primary-color);">
-                            <?php echo count($links); ?>
-                        </p>
-                    </div>
-                    
-                    <!-- Card 3: Total Forms -->
-                    <div class="stat-card">
-                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                            <i class="fas fa-file-alt" style="font-size: 2.5rem; color: var(--primary-color);"></i>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;"><?php echo __('total_forms'); ?></h3>
-                                <p style="margin: 0; font-size: 0.875rem; color: var(--secondary-color);">
-                                    <?php echo __('nav_forms'); ?>
-                                </p>
-                            </div>
-                        </div>
-                        <p class="stat-number" style="font-size: 3rem; font-weight: 700; margin: 0; color: var(--primary-color);">
-                            <?php echo count($forms); ?>
-                        </p>
-                    </div>
-                    
-                    <!-- Card 4: Recent Uploads -->
-                    <div class="stat-card">
+                    <!-- Card 2: Recent Uploads -->
+                    <div class="stat-card upload-card">
                         <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
                             <i class="fas fa-clock-rotate-left" style="font-size: 2.5rem; color: var(--primary-color);"></i>
                             <div>
-                                <h3 style="margin: 0; font-size: 1rem;"><?php echo __('recent_uploads'); ?></h3>
+                                <h3 style="margin: 0; font-size: 1rem;">Upload Terbaru</h3>
                                 <p style="margin: 0; font-size: 0.875rem; color: var(--secondary-color);">
-                                    <?php echo __('total_files'); ?> <?php echo number_format($totalFiles); ?> file
+                                    Total <?php echo number_format($totalFiles); ?> file
                                 </p>
                             </div>
                         </div>
@@ -195,19 +204,19 @@ requireLogin();
                 </div>
                 
                 <div class="quick-actions">
-                    <h2><?php echo __('quick_actions'); ?></h2>
+                    <h2>Aksi Cepat</h2>
                     <div class="action-buttons">
                         <a href="<?php echo BASE_URL; ?>/pages/links/index.php" class="btn btn-primary">
-                            <i class="fas fa-link"></i> <?php echo __('nav_links'); ?>
+                            <i class="fas fa-link"></i> Kelola Links
                         </a>
                         <a href="<?php echo BASE_URL; ?>/pages/forms/index.php" class="btn btn-secondary">
-                            <i class="fas fa-file-alt"></i> <?php echo __('nav_forms'); ?>
+                            <i class="fas fa-file-alt"></i> Kelola Forms
                         </a>
                         <a href="<?php echo BASE_URL; ?>/pages/files/index.php" class="btn btn-success">
-                            <i class="fas fa-folder-open"></i> <?php echo __('nav_file_manager'); ?>
+                            <i class="fas fa-folder-open"></i> File Manager
                         </a>
                         <button onclick="refreshPage()" class="btn btn-info" type="button">
-                            <i class="fas fa-sync-alt"></i> <?php echo __('refresh'); ?>
+                            <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
                 </div>
@@ -217,8 +226,8 @@ requireLogin();
         </div> <!-- End content-wrapper -->
     </div> <!-- End main-content -->
     
-    <script src="assets/js/i18n.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/pwa.js"></script>
     <script>
         function refreshPage() {
             const icon = event.target.classList.contains('fa-sync-alt') 

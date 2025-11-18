@@ -150,6 +150,7 @@ requireLogin();
         <?php include __DIR__ . '/../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../includes/page-navigation.php'; ?>
             <div class="profile-container">
                 
                 <div class="profile-header">
@@ -196,15 +197,6 @@ requireLogin();
                     
                     <div class="info-row">
                         <div class="info-label">
-                            <i class="fas fa-id-badge"></i> Google ID
-                        </div>
-                        <div class="info-value">
-                            <?php echo htmlspecialchars($_SESSION['user_id'] ?? '-'); ?>
-                        </div>
-                    </div>
-                    
-                    <div class="info-row">
-                        <div class="info-label">
                             <i class="fas fa-sign-in-alt"></i> Login Terakhir
                         </div>
                         <div class="info-value">
@@ -217,26 +209,6 @@ requireLogin();
                             ?>
                         </div>
                     </div>
-                    
-                    <div class="info-row">
-                        <div class="info-label">
-                            <i class="fas fa-shield-alt"></i> Provider
-                        </div>
-                        <div class="info-value">
-                            <i class="fab fa-google" style="color: #4285f4;"></i> Google OAuth 2.0
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="info-note">
-                    <h3>
-                        <i class="fas fa-info-circle"></i> Catatan
-                    </h3>
-                    <ul>
-                        <li>Data profil Anda dikelola oleh Google</li>
-                        <li>Untuk mengubah informasi profil, silakan kunjungi <a href="https://myaccount.google.com/" target="_blank">Google Account</a></li>
-                        <li>Foto profil akan otomatis tersinkronisasi dengan akun Google Anda</li>
-                    </ul>
                 </div>
             </div>
             
@@ -244,7 +216,6 @@ requireLogin();
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
 </body>
 </html>

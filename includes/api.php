@@ -4,7 +4,6 @@ require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json');
 
-// Check if user is logged in
 if (!isLoggedIn()) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();
@@ -28,7 +27,6 @@ try {
 }
 
 function getDashboardStats() {
-    // Dashboard stats without guru data
     return [
         'total_files' => 0,
         'total_links' => 0,

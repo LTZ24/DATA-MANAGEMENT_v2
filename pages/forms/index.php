@@ -7,27 +7,35 @@ requireLogin();
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
 
-// Get selected category from query parameter
+$cacheTime = 300;
+
 $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
 
-// Get all categories
 $categories = getFormCategories();
 
-// Get forms from Google Sheets (filtered by category if selected)
-if ($selectedCategory && isset($categories[$selectedCategory])) {
-    $forms = getFormsFromSheets($selectedCategory);
+$cacheKey = 'forms_cache_' . ($selectedCategory ?: 'all');
+
+if (isset($_SESSION[$cacheKey]) && 
+    isset($_SESSION[$cacheKey . '_time']) && 
+    (time() - $_SESSION[$cacheKey . '_time']) < $cacheTime) {
+    $forms = $_SESSION[$cacheKey];
 } else {
-    // Get all forms from all categories
-    $forms = [];
-    foreach ($categories as $key => $category) {
-        $categoryForms = getFormsFromSheets($key);
-        foreach ($categoryForms as $form) {
-            $form['category'] = $key;
-            $form['category_name'] = $category['name'];
-            $form['category_color'] = $category['color'];
-            $forms[] = $form;
+    if ($selectedCategory && isset($categories[$selectedCategory])) {
+        $forms = getFormsFromSheets($selectedCategory);
+    } else {
+        $forms = [];
+        foreach ($categories as $key => $category) {
+            $categoryForms = getFormsFromSheets($key);
+            foreach ($categoryForms as $form) {
+                $form['category'] = $key;
+                $form['category_name'] = $category['name'];
+                $form['category_color'] = $category['color'];
+                $forms[] = $form;
+            }
         }
     }
+    $_SESSION[$cacheKey] = $forms;
+    $_SESSION[$cacheKey . '_time'] = time();
 }
 ?>
 <!DOCTYPE html>
@@ -256,6 +264,7 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         <?php include __DIR__ . '/../../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
             
             <?php if ($success): ?>
                 <div class="alert alert-success">
@@ -366,7 +375,6 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
-    <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
+    <script src="<?php echo BASE_URL; ?>/assets/js/main.js\"></script>
 </body>
 </html>

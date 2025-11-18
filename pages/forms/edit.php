@@ -189,6 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
         
         <main class="main-content">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <h1>Edit Form</h1>
                 <a href="index.php" class="btn btn-secondary">
@@ -253,7 +255,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/ajax.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
 </body>

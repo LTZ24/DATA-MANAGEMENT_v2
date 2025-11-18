@@ -1,18 +1,5 @@
 /**
  * Session Keep-Alive Script
- * Mencegah session timeout ketika user sedang aktif menggunakan aplikasi
- * 
- * Cara Kerja:
- * 1. Setiap 5 menit (300 detik), kirim ping ke server
- * 2. Server akan update $_SESSION['last_activity']
- * 3. Session timeout = 30 menit (1800 detik)
- * 4. Jadi user bisa idle maksimal 30 menit tanpa aktivitas
- * 
- * Auto Activity Detection:
- * - Mouse movement
- * - Keyboard input
- * - Scroll
- * - Click
  */
 
 (function() {
@@ -32,18 +19,12 @@
     let idleCheckTimer = null;
     let warningShown = false;
     
-    /**
-     * Update last activity timestamp
-     */
     function updateActivity() {
         lastActivityTime = Date.now();
         warningShown = false;
         hideWarning();
     }
     
-    /**
-     * Send ping to server to keep session alive
-     */
     function pingServer() {
         fetch(window.location.href, {
             method: 'HEAD',
@@ -62,30 +43,21 @@
         });
     }
     
-    /**
-     * Check if user is idle
-     */
     function checkIdleTime() {
         const idleTime = Date.now() - lastActivityTime;
         
-        // Show warning 2 minutes before timeout
         if (idleTime >= CONFIG.WARNING_TIME && !warningShown) {
             showWarning();
             warningShown = true;
         }
         
-        // Redirect to login if timeout reached
         if (idleTime >= CONFIG.SESSION_TIMEOUT) {
             console.log('[Session] Timeout reached, redirecting to login...');
             window.location.href = getBaseUrl() + '/auth/login.php?session_timeout=1';
         }
     }
     
-    /**
-     * Show session timeout warning
-     */
     function showWarning() {
-        // Remove existing warning if any
         hideWarning();
         
         const warning = document.createElement('div');
@@ -126,15 +98,11 @@
         
         document.body.appendChild(warning);
         
-        // Auto hide after 10 seconds
         setTimeout(() => {
             hideWarning();
         }, 10000);
     }
     
-    /**
-     * Hide session timeout warning
-     */
     function hideWarning() {
         const warning = document.getElementById('session-timeout-warning');
         if (warning) {
@@ -142,19 +110,12 @@
         }
     }
     
-    /**
-     * Get base URL from current location
-     */
     function getBaseUrl() {
         const path = window.location.pathname;
         const parts = path.split('/');
-        // Assuming structure: /Data-Base-Guru-v2/...
         return parts.slice(0, 2).join('/') || '';
     }
     
-    /**
-     * Initialize session keep-alive system
-     */
     function init() {
         console.log('[Session] Keep-alive system initialized');
         console.log('[Session] Ping interval:', CONFIG.PING_INTERVAL / 1000, 'seconds');
@@ -165,22 +126,15 @@
             document.addEventListener(event, updateActivity, { passive: true });
         });
         
-        // Start ping timer
         sessionPingTimer = setInterval(pingServer, CONFIG.PING_INTERVAL);
         
-        // Start idle check timer
         idleCheckTimer = setInterval(checkIdleTime, CONFIG.IDLE_CHECK_INTERVAL);
         
-        // Initial ping
         pingServer();
         
-        // Update activity on page load
         updateActivity();
     }
     
-    /**
-     * Cleanup on page unload
-     */
     function cleanup() {
         if (sessionPingTimer) {
             clearInterval(sessionPingTimer);
@@ -196,7 +150,6 @@
         console.log('[Session] Keep-alive system cleaned up');
     }
     
-    // Add CSS animation
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideInRight {
@@ -212,7 +165,6 @@
     `;
     document.head.appendChild(style);
     
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

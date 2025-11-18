@@ -1,19 +1,11 @@
 // Main JavaScript File
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize dark mode
     initDarkMode();
-    
-    // Initialize tooltips if any
     initTooltips();
-    
-    // Initialize modals if any
     initModals();
-    
-    // Auto-hide alerts
     autoHideAlerts();
 });
 
-// Dark Mode initialization
 function initDarkMode() {
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
     if (isDarkMode) {
@@ -21,7 +13,6 @@ function initDarkMode() {
     }
 }
 
-// Tooltip initialization
 function initTooltips() {
     const tooltips = document.querySelectorAll('[data-tooltip]');
     tooltips.forEach(element => {
@@ -46,7 +37,6 @@ function initTooltips() {
     });
 }
 
-// Modal initialization
 function initModals() {
     const modalTriggers = document.querySelectorAll('[data-modal]');
     modalTriggers.forEach(trigger => {
@@ -70,7 +60,6 @@ function initModals() {
         });
     });
     
-    // Close modal on outside click
     window.addEventListener('click', function(e) {
         if (e.target.classList.contains('modal')) {
             e.target.style.display = 'none';
@@ -78,7 +67,6 @@ function initModals() {
     });
 }
 
-// Auto hide alerts after 5 seconds
 function autoHideAlerts() {
     const alerts = document.querySelectorAll('.alert');
     alerts.forEach(alert => {
@@ -91,17 +79,14 @@ function autoHideAlerts() {
     });
 }
 
-// Confirm delete action
 function confirmDelete(message = 'Apakah Anda yakin ingin menghapus data ini?') {
     return confirm(message);
 }
 
-// Format number with thousand separator
 function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Show loading spinner
 function showLoading() {
     const loading = document.createElement('div');
     loading.className = 'loading-overlay';
@@ -109,7 +94,6 @@ function showLoading() {
     document.body.appendChild(loading);
 }
 
-// Hide loading spinner
 function hideLoading() {
     const loading = document.querySelector('.loading-overlay');
     if (loading) {
@@ -117,7 +101,6 @@ function hideLoading() {
     }
 }
 
-// AJAX request helper
 async function fetchData(url, options = {}) {
     try {
         showLoading();
@@ -133,7 +116,6 @@ async function fetchData(url, options = {}) {
     }
 }
 
-// Export functions for global use
 window.confirmDelete = confirmDelete;
 window.formatNumber = formatNumber;
 window.showLoading = showLoading;

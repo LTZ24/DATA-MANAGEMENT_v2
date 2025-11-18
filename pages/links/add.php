@@ -7,7 +7,6 @@ requireLogin();
 $error = '';
 $success = '';
 
-// Get categories
 $categories = getLinkCategories();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,6 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             if (addLinkToSheets($title, $url, $category)) {
+                unset($_SESSION['links_cache_all']);
+                unset($_SESSION['links_cache_all_time']);
+                unset($_SESSION['links_cache_' . $category]);
+                unset($_SESSION['links_cache_' . $category . '_time']);
+                unset($_SESSION['dashboard_cache']);
+                unset($_SESSION['dashboard_cache_time']);
+                
                 $success = 'Link berhasil ditambahkan!';
                 header("refresh:2;url=index.php?success=Link berhasil ditambahkan&category=" . $category);
             } else {
@@ -199,6 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include __DIR__ . '/../../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <div class="page-header">
                 <a href="index.php" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali
@@ -281,7 +289,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/ajax.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
 </body>

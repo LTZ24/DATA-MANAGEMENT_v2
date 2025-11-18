@@ -7,27 +7,35 @@ requireLogin();
 $success = isset($_GET['success']) ? $_GET['success'] : '';
 $error = isset($_GET['error']) ? $_GET['error'] : '';
 
-// Get selected category from query parameter
+$cacheTime = 300;
+
 $selectedCategory = isset($_GET['category']) ? $_GET['category'] : '';
 
-// Get all categories
 $categories = getLinkCategories();
 
-// Get links from Google Sheets (filtered by category if selected)
-if ($selectedCategory && isset($categories[$selectedCategory])) {
-    $links = getLinksFromSheets($selectedCategory);
+$cacheKey = 'links_cache_' . ($selectedCategory ?: 'all');
+
+if (isset($_SESSION[$cacheKey]) && 
+    isset($_SESSION[$cacheKey . '_time']) && 
+    (time() - $_SESSION[$cacheKey . '_time']) < $cacheTime) {
+    $links = $_SESSION[$cacheKey];
 } else {
-    // Get all links from all categories
-    $links = [];
-    foreach ($categories as $key => $category) {
-        $categoryLinks = getLinksFromSheets($key);
-        foreach ($categoryLinks as $link) {
-            $link['category'] = $key;
-            $link['category_name'] = $category['name'];
-            $link['category_color'] = $category['color'];
-            $links[] = $link;
+    if ($selectedCategory && isset($categories[$selectedCategory])) {
+        $links = getLinksFromSheets($selectedCategory);
+    } else {
+        $links = [];
+        foreach ($categories as $key => $category) {
+            $categoryLinks = getLinksFromSheets($key);
+            foreach ($categoryLinks as $link) {
+                $link['category'] = $key;
+                $link['category_name'] = $category['name'];
+                $link['category_color'] = $category['color'];
+                $links[] = $link;
+            }
         }
     }
+    $_SESSION[$cacheKey] = $links;
+    $_SESSION[$cacheKey . '_time'] = time();
 }
 ?>
 <!DOCTYPE html>
@@ -256,6 +264,7 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         <?php include __DIR__ . '/../../includes/header.php'; ?>
         
         <div class="content-wrapper">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
             
             <?php if ($success): ?>
                 <div class="alert alert-success">
@@ -368,7 +377,6 @@ if ($selectedCategory && isset($categories[$selectedCategory])) {
         </div>
     </div>
     
-    <script src="<?php echo BASE_URL; ?>/assets/js/i18n.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/ajax.js"></script>
     <script src="<?php echo BASE_URL; ?>/assets/js/main.js"></script>
 </body>

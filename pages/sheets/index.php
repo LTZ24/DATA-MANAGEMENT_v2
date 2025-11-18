@@ -63,6 +63,8 @@ requireLogin();
         <?php include __DIR__ . '/../../includes/sidebar.php'; ?>
         
         <main class="main-content">
+            <?php include __DIR__ . '/../../includes/page-navigation.php'; ?>
+            
             <h1>Google Sheets Database</h1>
             <p>Informasi dan akses ke Google Sheets yang digunakan untuk menyimpan data per kategori</p>
             
